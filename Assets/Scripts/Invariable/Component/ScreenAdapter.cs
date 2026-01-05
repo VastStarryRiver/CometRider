@@ -8,48 +8,42 @@ namespace Invariable
     public class ScreenAdapter : MonoBehaviour
     {
         private RectTransform m_tsPanel;
-        private Vector2Int m_lastScreenSize;
-        private ScreenOrientation m_lastOrientation;
+        private int m_lastOrientation;
 
 
 
         private void Awake()
         {
             m_tsPanel = GetComponent<RectTransform>();
-            m_lastScreenSize = Vector2Int.zero;
-            m_lastOrientation = ScreenOrientation.AutoRotation;
-            Refresh();
+            m_lastOrientation = -1;
         }
 
         private void Update()
         {
-            Refresh();
-        }
-
-
-
-        private void Refresh()
-        {
-            bool isArea = SdkManager.Instance.JudgeSafeArea();
-
-            if (isArea || Screen.width != m_lastScreenSize.x || Screen.height != m_lastScreenSize.y || Screen.orientation != m_lastOrientation)
+            if (m_lastOrientation != (int)Screen.orientation)
             {
-                m_lastScreenSize.x = Screen.width;
-                m_lastScreenSize.y = Screen.height;
-                m_lastOrientation = Screen.orientation;
-
                 ApplySafeArea();
             }
         }
 
+
+
         private void ApplySafeArea()
         {
-            SdkManager.Instance.SetSafeArea();
+            Rect safeArea = Screen.safeArea; // 原点在左下角
 
-            SdkManager.Instance.GetSafeAnchor(out Vector2 anchorMin, out Vector2 anchorMax);
+            Vector2 anchorMin = safeArea.position;
+            Vector2 anchorMax = safeArea.position + safeArea.size;
+
+            anchorMin.x /= Screen.width;
+            anchorMin.y /= Screen.height;
+            anchorMax.x /= Screen.width;
+            anchorMax.y /= Screen.height;
 
             m_tsPanel.anchorMin = anchorMin;
             m_tsPanel.anchorMax = anchorMax;
+
+            m_lastOrientation = (int)Screen.orientation;
         }
     }
 }

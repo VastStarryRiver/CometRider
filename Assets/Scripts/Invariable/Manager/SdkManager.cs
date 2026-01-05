@@ -28,15 +28,15 @@ namespace Invariable
 
             tapTapSdkOptions = new TapTapSdkOptions
             {
-                clientId = tapTapId,//ID，开发者后台获取
+                clientId = tapTapId, // ID，开发者后台获取
 
-                clientToken = tapTapToken,//令牌，开发者后台获取
+                clientToken = tapTapToken, // 令牌，开发者后台获取
 
-                region = TapTapRegionType.CN,// 地区，CN 为国内，Overseas 为海外
+                region = TapTapRegionType.CN, // 地区，CN 为国内，Overseas 为海外
 
-                preferredLanguage = TapTapLanguageType.zh_Hans,// 语言，默认为 Auto，默认情况下，国内为 zh_Hans，海外为 en
+                preferredLanguage = TapTapLanguageType.zh_Hans, // 语言，默认为 Auto，默认情况下，国内为 zh_Hans，海外为 en
 
-                enableLog = true,// 是否开启日志，Release 版本请设置为 false
+                enableLog = true, // 是否开启日志，Release 版本请设置为 false
             };
 
             TapTapSDK.Init(tapTapSdkOptions);
@@ -53,12 +53,7 @@ namespace Invariable
         public void Login(Action<string> loginCallBack)
         {
             m_loginCallBack = loginCallBack;
-
-#if !UNITY_EDITOR && UNITY_WEBGL
-            LoginMiniGame();
-#else
             LoginTapTap();
-#endif
         }
 
         private void LoginTapTap()
@@ -67,7 +62,7 @@ namespace Invariable
             {
                 AsyncLoginAccount();
             }
-            catch (TaskCanceledException)
+            catch (TaskCanceledException _)
             {
                 Debug.Log("用户取消登录");
             }

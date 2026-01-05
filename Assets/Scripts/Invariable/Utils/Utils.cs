@@ -152,9 +152,10 @@ namespace Invariable
 
         public static void RestartGame()
         {
-#if !UNITY_EDITOR && !UNITY_WEBGL
+#if !UNITY_EDITOR
             Application.logMessageReceived -= DebugLogTool.ShowDebugErrorLog;
 #endif
+
             UIManager.Instance.CloseAllUIPanel();
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }

@@ -1,10 +1,6 @@
 using YooAsset;
 using System.Collections;
 
-#if UNITY_WEBGL
-using WeChatWASM;
-#endif
-
 
 
 namespace Invariable
@@ -92,22 +88,6 @@ namespace Invariable
                 HostPlayModeParameters createParameters = new HostPlayModeParameters();
                 createParameters.BuildinFileSystemParameters = buildinFileSystemParams;
                 createParameters.CacheFileSystemParameters = cacheFileSystemParams;
-
-                initOperation = package.InitializeAsync(createParameters);
-            }
-            else if (playMode == EPlayMode.WebPlayMode)
-            {
-                string defaultHostServer = ConfigUtils.CDNPath;
-                string fallbackHostServer = defaultHostServer;
-                var remoteServices = new RemoteServices(defaultHostServer, fallbackHostServer);
-
-                WebPlayModeParameters createParameters = new WebPlayModeParameters();
-
-#if UNITY_WEBGL
-                string packageRoot = $"{WX.env.USER_DATA_PATH}/__GAME_FILE_CACHE/yoo";
-                ConfigUtils.m_localRootPath = packageRoot + "/";
-                createParameters.WebServerFileSystemParameters = WechatFileSystemCreater.CreateFileSystemParameters(packageRoot, remoteServices, null);
-#endif
 
                 initOperation = package.InitializeAsync(createParameters);
             }

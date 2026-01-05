@@ -60,13 +60,6 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
-    "com.qq.weixin.minigame": {
-      "version": "https://gitee.com/wechat-minigame/minigame-tuanjie-transform-sdk.git#main",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "98c94c1219b8ddf48d2836e946c5d5d16bfd2cca"
-    },
     "com.taptap.sdk.core": {
       "version": "https://github.com/taptap/tapsdk-unity-dist.git?path=/Core#4.9.1",
       "depth": 0,

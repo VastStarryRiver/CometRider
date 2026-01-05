@@ -11,7 +11,7 @@ namespace Invariable
         {
             get
             {
-                string key = SdkManager.Instance.GetLocalData(Application.productName + "_LanguageKey", "");
+                string key = PlayerPrefs.GetString(Application.productName + "_LanguageKey", "");
 
                 if (string.IsNullOrEmpty(key))
                 {
@@ -34,7 +34,7 @@ namespace Invariable
 
         public void SetLanguageKey(string key, bool isRestart = true)
         {
-            SdkManager.Instance.SetLocalData(Application.productName + "_LanguageKey", key);
+            PlayerPrefs.SetString(Application.productName + "_LanguageKey", key);
 
             if (isRestart)
             {

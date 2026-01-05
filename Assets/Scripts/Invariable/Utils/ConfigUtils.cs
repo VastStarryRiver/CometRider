@@ -28,8 +28,7 @@ namespace Invariable
         public readonly static string m_keystorePath = m_localRootPath + "SpectraAbyss.keystore";
         public readonly static string m_hotUpdateDllPath = m_localRootPath + "Assets/GameAssets/DLL";
         public readonly static string m_cdnPath = m_localRootPath + "CDN";
-        public readonly static string m_miniBuildPath = m_localRootPath + "Build";
-        public readonly static string m_miniWebglPath = m_miniBuildPath + "/webgl";
+        public readonly static string m_buildPath = m_localRootPath + "Build";
 
         /// <summary>
         /// CDN地址

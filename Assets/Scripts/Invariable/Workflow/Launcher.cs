@@ -21,9 +21,6 @@ namespace Invariable
 
 #elif UNITY_ANDROID
             m_playMode = EPlayMode.HostPlayMode;
-
-#elif UNITY_WEBGL
-            m_playMode = EPlayMode.WebPlayMode;
 #endif
 
             DebugLogTool.InitDebugErrorLog();

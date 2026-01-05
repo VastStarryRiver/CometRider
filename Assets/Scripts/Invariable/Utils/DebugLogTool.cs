@@ -34,7 +34,7 @@ namespace Invariable
 
         public static void ShowDebugErrorLog(string logString, string stackTrace, LogType type)
         {
-#if !UNITY_EDITOR && !UNITY_WEBGL
+#if !UNITY_EDITOR
             if (type == LogType.Error || type == LogType.Exception)
             {
                 string text = logString + "\n" + stackTrace;
@@ -65,7 +65,7 @@ namespace Invariable
 
         public static void InitDebugErrorLog()
         {
-#if !UNITY_EDITOR && !UNITY_WEBGL
+#if !UNITY_EDITOR
         ConfigUtils.InitDirectory(ConfigUtils.m_localRootPath);
 
         using (FileStream fileStream = new FileStream(ConfigUtils.m_localRootPath + "Error.txt", FileMode.Create))

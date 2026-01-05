@@ -7,6 +7,8 @@ using System.Reflection;
 using System.Linq;
 using UnityEngine.Networking;
 using System.Text;
+using System.IO;
+using HybridCLR;
 
 
 
@@ -86,6 +88,44 @@ namespace Invariable
         }
 
         /// <summary>
+        /// 补充元数据
+        /// </summary>
+        private void LoadMetadataForAOTAssemblies(string platform, Action<Assembly> callBack)
+        {
+            List<string> aotDllList = new List<string>
+            {
+                "mscorlib",
+                "System",
+                "System.Core",
+                "Newtonsoft.Json", 
+            };
+
+            int index = 0;
+
+            foreach (string aotDllName in aotDllList)
+            {
+                AsyncLoadAsset<BinAsset>($"{platform}_{aotDllName}.dll", (data) =>
+                {
+                    byte[] bytes = ConfigUtils.ReadSafeFile<byte[]>(data.bytes);
+                    RuntimeApi.LoadMetadataForAOTAssembly(bytes, HomologousImageMode.SuperSet);
+
+                    index++;
+
+                    if (index >= aotDllList.Count)
+                    {
+                        AsyncLoadAsset<BinAsset>($"{platform}_HotUpdate.dll", (data) =>
+                        {
+                            byte[] bytes = ConfigUtils.ReadSafeFile<byte[]>(data.bytes);
+                            Assembly hotUpdateAss = Assembly.Load(bytes);
+                            m_hotUpdateAssembly = hotUpdateAss;
+                            callBack?.Invoke(hotUpdateAss);
+                        });
+                    }
+                });
+            }
+        }
+
+        /// <summary>
         /// 预加载Dll
         /// </summary>
         /// <param name="callBack"></param>
@@ -97,7 +137,7 @@ namespace Invariable
                 return;
             }
 
-            string dllName = "";
+            string platform = "";
 
 #if UNITY_EDITOR
             Assembly hotUpdateAss = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "HotUpdate");
@@ -106,19 +146,10 @@ namespace Invariable
             return;
 
 #elif UNITY_ANDROID
-            dllName = "Android_HotUpdate.dll";
-
-#elif UNITY_WEBGL
-            dllName = "WebGL_HotUpdate.dll";
+            platform = "Android";
 #endif
 
-            AsyncLoadAsset<BinAsset>(dllName, (data) =>
-            {
-                byte[] bytes = ConfigUtils.ReadSafeFile<byte[]>(data.bytes);
-                Assembly hotUpdateAss = Assembly.Load(bytes);
-                m_hotUpdateAssembly = hotUpdateAss;
-                callBack?.Invoke(hotUpdateAss);
-            });
+            LoadMetadataForAOTAssemblies(platform, callBack);
         }
 
         /// <summary>

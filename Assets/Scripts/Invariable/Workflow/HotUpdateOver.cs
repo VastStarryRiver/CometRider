@@ -37,15 +37,10 @@ namespace Invariable
             GameManager.Instance.InvokeEventCallBack("Launcher_ShowTips", "初始化运行系统");
 
             LanguageManager.Instance.SetLanguageKey(LanguageManager.Instance.LanguageKey, false);
-
-#if !UNITY_EDITOR && UNITY_WEBGL
-            MessageNetManager.Instance.ResetWebSocket();
-            SdkManager.Instance.InitMiniGameSDK(StartGame);
-#else
             MessageNetManager.Instance.ResetSocket();
             SdkManager.Instance.InitTapTapSdkOptions();
+
             StartGame();
-#endif
         }
 
         /// <summary>

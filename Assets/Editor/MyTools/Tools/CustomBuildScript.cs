@@ -4,10 +4,6 @@ using UnityEditor;
 using UnityEngine;
 using Invariable;
 
-#if UNITY_WEBGL
-using WeChatWASM;
-#endif
-
 
 
 namespace MyTools
@@ -18,7 +14,7 @@ namespace MyTools
         public static void PackageProject_Android()
         {
             SetAndroidKeystore();
-            PackageProject(BuildTarget.Android, Environment.GetFolderPath(Environment.SpecialFolder.Desktop).Replace("\\", "/") + "/SpectraAbyss.apk");
+            PackageProject(BuildTarget.Android, ConfigUtils.m_buildPath + "/SpectraAbyss.apk");
         }
 
         [MenuItem("VastStarryRiver/打包/打包成APK文件", true, 30)]
@@ -31,45 +27,7 @@ namespace MyTools
 #endif
         }
 
-        [MenuItem("VastStarryRiver/打包/打包微信小游戏", false, 31)]
-        public static void PackageProject_WeiXin()
-        {
-#if UNITY_WEBGL
-            if (Directory.Exists(ConfigUtils.m_miniBuildPath))
-            {
-                Directory.Delete(ConfigUtils.m_miniBuildPath, true);
-            }
-
-            ConfigUtils.InitDirectory(ConfigUtils.m_miniBuildPath);
-
-            if (WXConvertCore.DoExport() == WXConvertCore.WXExportError.SUCCEED)
-            {
-                if (WXConvertCore.IsInstantGameAutoStreaming())
-                {
-                    if (!string.IsNullOrEmpty(WXConvertCore.FirstBundlePath) && File.Exists(WXConvertCore.FirstBundlePath))
-                    {
-                        Debug.Log("转换成功");
-                    }
-                    else
-                    {
-                        Debug.LogError("转换失败");
-                    }
-                }
-            }
-#endif
-        }
-
-        [MenuItem("VastStarryRiver/打包/打包微信小游戏", true, 31)]
-        private static bool PackageProject_WeiXin_Validate()
-        {
-#if UNITY_ANDROID
-            return false;
-#else
-            return true;
-#endif
-        }
-
-        [MenuItem("VastStarryRiver/打包/复制文件到CDN目录", false, 32)]
+        [MenuItem("VastStarryRiver/打包/复制文件到CDN目录", false, 31)]
         public static void MoveFileToCND()
         {
             if (Directory.Exists(ConfigUtils.m_cdnPath))
@@ -80,10 +38,6 @@ namespace MyTools
             ConfigUtils.InitDirectory(ConfigUtils.m_cdnPath);
 
             MoveBundleToCND();
-
-#if UNITY_WEBGL
-            MoveMiniGameToCND();
-#endif
         }
 
 
@@ -106,34 +60,6 @@ namespace MyTools
                 string sourceFilePath = item.FullName.Replace("\\", "/");
                 string targetFilePath = ConfigUtils.m_cdnPath + "/" + Path.GetFileName(sourceFilePath);
                 File.Copy(sourceFilePath, targetFilePath);
-            }
-        }
-
-        private static void MoveMiniGameToCND()
-        {
-            string path = ConfigUtils.m_miniWebglPath;
-
-            if (!Directory.Exists(path))
-            {
-                return;
-            }
-
-            DirectoryInfo directoryInfo = new DirectoryInfo(path);
-
-            FileInfo[] fileInfos = directoryInfo.GetFiles();
-
-            foreach (var item in fileInfos)
-            {
-                if (!item.FullName.Contains(".webgl.data.unityweb.bin.br"))
-                {
-                    continue;
-                }
-
-                string sourceFilePath = item.FullName.Replace("\\", "/");
-                string targetFilePath = ConfigUtils.m_cdnPath + "/" + Path.GetFileName(sourceFilePath);
-                File.Copy(sourceFilePath, targetFilePath);
-
-                break;
             }
         }
 
@@ -164,7 +90,7 @@ namespace MyTools
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions
             {
                 scenes = scenes,
-                locationPathName = locationPathName,//打包的输出路径
+                locationPathName = locationPathName, // 打包的输出路径
                 target = target,
                 options = BuildOptions.None
             };

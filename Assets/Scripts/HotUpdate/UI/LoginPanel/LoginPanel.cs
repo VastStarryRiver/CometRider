@@ -9,12 +9,6 @@ namespace HotUpdate
     {
         private void Awake()
         {
-#if !UNITY_EDITOR && UNITY_WEBGL
-            Utils.SetImage(gameObject, "parent/Btn_Login", "Atlas00/00_login2");
-#else
-            Utils.SetImage(gameObject, "parent/Btn_Login", "Atlas00/00_login1");
-#endif
-
             Utils.PlayAnimation(gameObject, null, "Play", WrapMode.Once, () =>
             {
                 Utils.SetImage(gameObject, "parent/Img_State1", "Atlas02/02_rwtx5");
@@ -25,7 +19,7 @@ namespace HotUpdate
                 Utils.GetetTextByKey(8, (text) =>
                 {
                     Utils.SetText(gameObject, "parent/Text_Name", text);
-                }, "#1BB25F", "£¿£¿£¿");//Ãû×Ö£º<color={0}>{1}</color>
+                }, "#1BB25F", "£¿£¿£¿"); // Ãû×Ö£º<color={0}>{1}</color>
 
                 Utils.AddClickListener(gameObject, "parent/Btn_Login", Login);
 
