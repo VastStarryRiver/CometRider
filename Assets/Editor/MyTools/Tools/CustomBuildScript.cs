@@ -14,17 +14,15 @@ namespace MyTools
         public static void PackageProject_Android()
         {
             SetAndroidKeystore();
-            PackageProject(BuildTarget.Android, ConfigUtils.m_buildPath + "/SpectraAbyss.apk");
-        }
 
-        [MenuItem("VastStarryRiver/打包/打包成APK文件", true, 30)]
-        private static bool PackageProject_Android_Validate()
-        {
-#if UNITY_ANDROID
-            return true;
-#else
-            return false;
-#endif
+            if (Directory.Exists(ConfigUtils.m_buildPath))
+            {
+                Directory.Delete(ConfigUtils.m_buildPath, true);
+            }
+
+            ConfigUtils.InitDirectory(ConfigUtils.m_buildPath);
+
+            PackageProject(BuildTarget.Android, ConfigUtils.m_buildPath + "/SpectraAbyss.apk");
         }
 
         [MenuItem("VastStarryRiver/打包/复制文件到CDN目录", false, 31)]
