@@ -73,6 +73,7 @@ namespace MyTools
             }
 
             // 设置 keystore 信息
+            PlayerSettings.Android.useCustomKeystore = true;
             PlayerSettings.Android.keystoreName = keystorePath;
             PlayerSettings.Android.keystorePass = "149630764"; // Keystore 密码
             PlayerSettings.Android.keyaliasName = "spectraabyss"; // Alias 名称
