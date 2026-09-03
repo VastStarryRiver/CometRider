@@ -1,4 +1,4 @@
-# CometRider
+# 框架内容概述
 
 Unity 客户端框架。用 HybridCLR 做代码热更，用 YooAsset 做资源热更，启动流程、UI、配置、网络和 SDK 都收在同一套程序集分层里。
 
